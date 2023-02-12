@@ -1,0 +1,4 @@
+UI_EN = {
+   UI_ReadAllLiterature_Read_All = "Read books",
+   UI_CollectAllLiterature_Collect_All = "Collect books",
+}

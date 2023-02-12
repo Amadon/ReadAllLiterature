@@ -1,0 +1,5 @@
+require "ReadAllLiterature/ReadAllLiterature"
+require "ReadAllLiterature/CollectAllLiterature"
+
+Events.OnRefreshInventoryWindowContainers.Add(ReadAllLiterature.AddReadButtonEvent)
+Events.OnRefreshInventoryWindowContainers.Add(CollectAllLiterature.AddCollectButtonEvent)

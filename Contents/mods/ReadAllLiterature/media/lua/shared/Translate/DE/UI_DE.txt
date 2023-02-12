@@ -1,0 +1,4 @@
+UI_DE = {
+   UI_ReadAllLiterature_Read_All = "Lese Bücher",
+   UI_CollectAllLiterature_Collect_All = "Sammle Bücher",
+}
