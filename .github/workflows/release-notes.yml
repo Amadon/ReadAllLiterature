@@ -22,6 +22,10 @@ jobs:
           TODO_LIST=$(grep -r --exclude-dir=vendor --exclude=*.md 'TODO' . | sed -e 's/^/  * /')
           echo "$TODO_LIST" > TODO-LIST.md
 
+      - name: Install conventional-changelog
+        run: |
+          npm install -g conventional-changelog
+
       - name: Create or update Changelog
         run: |
           CHANGELOG=$(conventional-changelog -p angular)
