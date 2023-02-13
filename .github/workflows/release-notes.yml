@@ -38,4 +38,4 @@ jobs:
           author_name: "Amadon"
           author_email: "amadon83@gmail.com"
           message: "Commit from GitHub Actions (Release Workflow)"
-          add: ['TODO-LIST.md','CHANGELOG.md','ISSUE-LIST.md']
+          add: "['TODO-LIST.md','CHANGELOG.md','ISSUE-LIST.md']"
