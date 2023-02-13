@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Create or update Todo List
-        uses: endbugs/actions-create-or-update-file
+        uses: EndBug/add-and-commit@v9
         with:
           file-name: todo-list.md
           file-content: |
@@ -24,7 +24,7 @@ jobs:
             $(grep -r --exclude-dir=vendor --exclude=*.md 'TODO' . | sed -e 's/^/  * /')
 
       - name: Create or update Changelog
-        uses: endbugs/actions-create-or-update-file
+        uses: EndBug/add-and-commit@v9
         with:
           file-name: CHANGELOG.md
           file-content: |
@@ -33,7 +33,7 @@ jobs:
             $(conventional-changelog -p angular)
 
       - name: Create or update Issue List
-        uses: endbugs/actions-create-or-update-file
+        uses: EndBug/add-and-commit@v9
         with:
           file-name: ISSUE_LIST.md
           file-content: |
