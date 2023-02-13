@@ -1,0 +1,24 @@
+name: Generate To-Do List
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate_todo_list:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Generate To-Do List
+      run: ./todo.sh
+
+    - name: Commit To-Do List
+      uses: endbugs/actions-create-or-update-file@v2
+      with:
+        file-path: todo.md
+        file-content: ${{ steps.generate_todo_list.outputs.stdout }}
+        commit-message: "chore(todo): Generate To-Do List [skip ci]"
