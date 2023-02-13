@@ -1,49 +1,42 @@
-name: Generate Release Notes
+name: Release Workflow
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - 'release/*'
+  create:
+    type: branch
+    branches:
+      - 'release/*'
 
 jobs:
-  generate_release_notes:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Create or update Todo List
+        uses: endbugs/actions-create-or-update-file@v2
+        with:
+          file-name: todo-list.md
+          file-content: |
+            # Todo List
 
-    - name: Get Github token
-      id: github_token
-      run: echo "::set-output name=token::${{ secrets.GITHUB_TOKEN }}"
+            $(grep -r --exclude-dir=vendor --exclude=*.md 'TODO' . | sed -e 's/^/  * /')
 
-    - name: Generate Todo List
-      run: |
-        echo "## Todo List" > todos.md
-        echo "" >> todos.md
-        grep -r "TODO" . | awk -F ":" '{print "- "$2}' >> todos.md
+      - name: Create or update Changelog
+        uses: endbugs/actions-create-or-update-file@v2
+        with:
+          file-name: CHANGELOG.md
+          file-content: |
+            # Changelog
 
-    - name: Generate Error List
-      run: |
-        echo "## Error List" > errors.md
-        echo "" >> errors.md
-        curl -H "Authorization: token ${{ steps.github_token.outputs.token }}" -X GET "https://api.github.com/repos/<OWNER>/<REPO>/issues?state=open&labels=bug" | jq -r '.[].title' | awk '{print "- "$0}' >> errors.md
+            $(conventional-changelog -p angular)
 
-    - name: Concatenate Todo and Error Lists
-      run: |
-        echo "# Release Notes" > release-notes.md
-        echo "" >> release-notes.md
-        echo "## Changes in this Release" >> release-notes.md
-        echo "" >> release-notes.md
-        echo "### Todo List" >> release-notes.md
-        cat todos.md >> release-notes.md
-        echo "" >> release-notes.md
-        echo "### Error List" >> release-notes.md
-        cat errors.md >> release-notes.md
+      - name: Create or update Issue List
+        uses: endbugs/actions-create-or-update-file@v2
+        with:
+          file-name: ISSUE_LIST.md
+          file-content: |
+            # Issue List
 
-    - name: Commit Release Notes
-      uses: endbugs/actions-create-or-update-file@v2
-      with:
-        file-path: release-notes.md
-        file-content: ${{ steps.concatenate_todo_and_error_lists.outputs.stdout }}
-        commit-message: "docs(release-notes): Generate Release Notes [skip ci]"
+            $(curl -H "Authorization: token $(GITHUB_TOKEN)" https://api.github.com/repos/$GITHUB_REPOSITORY/issues | jq '.[].title' -r | sed -e 's/^/  * /')
